@@ -5,14 +5,15 @@ type Props = {
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const Login = ({ setIsLogin  }: Props) => {
-    const navigate = useNavigate();
+const Login = ({ setIsLogin }: Props) => {
+  const navigate = useNavigate()
   return (
     <div className='w-full min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-20 py-10'>
       <div className='w-full max-w-md sm:max-w-lg lg:max-w-xl'>
         {/* Logo */}
-        <div className='flex items-center gap-2 mb-8 cursor-pointer'
-        onClick={() => navigate('/')}
+        <div
+          className='flex items-center gap-2 mb-8 cursor-pointer'
+          onClick={() => navigate('/')}
         >
           <div className='w-10 h-10 sm:w-11 sm:h-11'>
             <img className='rounded-2xl' src={logo} alt='Bulir Logos' />
@@ -64,8 +65,9 @@ const Login = ({ setIsLogin  }: Props) => {
 
           <p className='text-gray-400 text-sm'>
             Não tem uma conta?{' '}
-            <span className='text-[#28b39c] hover:underline cursor-pointer'
-            onClick={() => setIsLogin(false)}
+            <span
+              className='text-[#28b39c] hover:underline cursor-pointer'
+              onClick={() => setIsLogin(false)}
             >
               Registre-se
             </span>
