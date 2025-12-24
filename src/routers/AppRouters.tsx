@@ -9,10 +9,10 @@ import Profiler from "../pages/Profile";
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/home" element={<Home />} />
+      <Route path="/" element={<Home />} />
       <Route path="/services" element={<Service />} />
       <Route path="/login" element={<Sign />} />
-      <Route path="/" element={<Profiler />} />
+      <Route path="/profile" element={<Profiler />} />
     </Routes>
   );
 };

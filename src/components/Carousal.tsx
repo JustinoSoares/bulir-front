@@ -101,7 +101,7 @@ export default function MarqueeDemo() {
 
   return (
     <div className="bg-background p-8 flex flex-col gap-8 items-center justify-center">
-      <div className="w-full max-w-4xl ">
+      <div className="w-full md:max-w-4xl ">
         <div>
             <div className="flex flex-col md:flex-row justify-center items-start font-bold">
                <h2 className="text-5xl max-w-[600px] text-center text-[#292929] mb-8">

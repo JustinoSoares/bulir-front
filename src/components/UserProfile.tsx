@@ -2,13 +2,12 @@ import {
   FaEnvelope,
   FaFingerprint,
   FaEdit,
-  FaPlus,
-  FaStar,
   FaSearch
 } from 'react-icons/fa'
 import CardService from './CardService'
 import FullScreenDialog from './FullscreenDialog'
 import AddService from './Addservice'
+import Requests from './Requests'
 
 const UserProfile = () => {
   const userData = {
@@ -88,10 +87,10 @@ const UserProfile = () => {
                 </div>
               </div>
               <div className='flex gap-4'>
-                <button className='flex cursor-pointer items-center px-4 py-2 bg-white text-black rounded-lg hover:bg-blue-50 transition-colors duration-200'>
+                {/* <button className='flex cursor-pointer items-center px-4 py-2 bg-white text-black rounded-lg hover:bg-blue-50 transition-colors duration-200'>
                   <FaEdit className='mr-2' />
                   Editar
-                </button>
+                </button> */}
                 <FullScreenDialog />
               </div>
             </div>
@@ -112,10 +111,7 @@ const UserProfile = () => {
                   <span>{userData.nif}</span>
                 </div>
                 <div>
-                  <button className='flex cursor-pointer items-center px-4 py-2 bg-[#28b39c] text-black rounded-lg hover:bg-blue-50 transition-colors duration-200'>
-                    <FaStar className='mr-2' />
-                    Solicitações
-                  </button>
+                  <Requests />
                 </div>
               </div>
             </div>

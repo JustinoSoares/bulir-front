@@ -1,7 +1,7 @@
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { useRef } from 'react'
 import type { MouseEvent, ReactNode } from 'react'
-
+import { useNavigate } from 'react-router-dom'
 
 function MagnetButton ({
   children = 'Hover Me',
@@ -59,14 +59,26 @@ function MagnetButton ({
 }
 
 type MyComponentProps = {
-  children: ReactNode;
-  className?: string;
+  children: ReactNode
+  className?: string
+  navigateTo?: string
 }
 
 // Demo/Example Usage
-export default function MagneticButton ({children, className}: MyComponentProps) {
+export default function MagneticButton ({
+  children,
+  className,
+  navigateTo
+}: MyComponentProps) {
+  const navigate = useNavigate()
   return (
-    <div>
+    <div
+      onClick={() => {
+        if (navigateTo) {
+          navigate(navigateTo)
+        }
+      }}
+    >
       <MagnetButton className={className}>{children}</MagnetButton>
     </div>
   )

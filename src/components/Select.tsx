@@ -14,7 +14,7 @@ export default function SelectAutoWidth() {
 
   return (
     <div className=''>
-      <FormControl sx={{  minWidth: 200, width: "80%", border: "1px solid transparent", borderRadius: "10px" }} >
+      <FormControl sx={{  minWidth: 200, width: "100%", border: "1px solid transparent", borderRadius: "10px" }} >
         <InputLabel id="demo-simple-select-autowidth-label">Tipo de Usuário</InputLabel>
         <Select
           labelId="demo-simple-select-autowidth-label"

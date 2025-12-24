@@ -1,13 +1,18 @@
 import IconBulir from '../assets/img/logo.png'
 import CardService from '../components/CardService'
 import Footer from '../components/Footer'
+import { useNavigate } from 'react-router-dom'
 
 const Service = () => {
+  const navigate = useNavigate()
   return (
     <div>
       <div className='bg-[#ebfefa] min-h-screen px-20'>
         <header className='flex justify-between items-center py-6'>
-          <div className='flex justify-center items-center  gap-2'>
+          <div
+            className='flex justify-center items-center  gap-2 cursor-pointer'
+            onClick={() => navigate('/')}
+          >
             <div className='w-11 h-11'>
               <img className='rounded-2xl' src={IconBulir} alt='Bulir Logos' />
             </div>
