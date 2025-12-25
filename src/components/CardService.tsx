@@ -10,6 +10,7 @@ import DialogService from './Dialog'
 import { useEffect } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import type { TokenPayload } from '../types/index'
+import { FaTrash } from 'react-icons/fa'
 type MyServicesType = {
   id: string
   name: string
@@ -23,10 +24,12 @@ export default function CardService ({
   id,
   name,
   description,
-  price
+  price,
+  userId,
 }: MyServicesType) {
   const [loading, setLoading] = React.useState(false)
   const [dialogOpen, setDialogOpen] = React.useState(false)
+
   const [tokenPayload, setTokenPayload] = React.useState<TokenPayload | null>(
     null
   )
@@ -37,6 +40,7 @@ export default function CardService ({
       const decoded = jwtDecode<TokenPayload>(token)
       setTokenPayload(decoded)
     }
+    
   }, [])
 
   const formattedPrice = price.toLocaleString('pt-AO', {
@@ -56,6 +60,47 @@ export default function CardService ({
       setDialogOpen(false)
     }
   }
+
+  const deleteService = async () => {
+    try {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        toast.error('Usuário não autenticado')
+        return
+      }
+      setLoading(true)
+      const res = await axios.delete(
+        `https://bulir.enor.tech/service/delete/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+      console.log(res)
+      if (res.status !== 200 && res.status !== 201) {
+        toast.error(res.data.message || 'Erro ao deletar serviço')
+        setLoading(false)
+        return
+      }
+      toast.success(`Serviço ${name} deletado com sucesso!`)
+      // talvez atualizar a lista de serviços aqui
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        const message =
+          error.response?.data?.message ||
+          'Erro ao deletar serviço. Por favor, tente novamente.'
+        toast.error(message)
+      } else if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error('Erro inesperado.')
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const RequestService = async () => {
     try {
       const token = localStorage.getItem('token')
@@ -126,18 +171,32 @@ export default function CardService ({
           }
         }}
       />
-      <CardContent>
-        <h2 className='text-lg font-semibold mb-2'>{name}</h2>
-        <p className='text-gray-600'>{description}</p>
-      </CardContent>
+      <div className='relative'>
+       { userId === tokenPayload?.userId && (
+          <div
+          onClick={() => {
+            deleteService()
+          }}
+          
+          className='absolute top-0 right-0 flex justify-center items-center rounded-full m-5 w-10 h-10 bg-gray-200 '>
+          <FaTrash className='text-center m-2 cursor-pointer text-red-500' />
+        </div>
+       )}
+        <CardContent>
+          <h2 className='text-lg font-semibold mb-2'>{name}</h2>
+          <p className='text-gray-600'>{description}</p>
+        </CardContent>
 
-      <CardActions className='flex items-center justify-between'>
-        {tokenPayload && tokenPayload.user_type === 'client' && (
-          <DialogService key={id} {...dataDialog} />
-        )}
-        {/* <Button size='small'>Learn More</Button> */}
-        <p className='text-gray-500 text-sm text-end px-2'>{formattedPrice}</p>
-      </CardActions>
+        <CardActions className='flex items-center justify-between'>
+          {tokenPayload && tokenPayload.user_type === 'client' && (
+            <DialogService key={id} {...dataDialog} />
+          )}
+          {/* <Button size='small'>Learn More</Button> */}
+          <p className='text-gray-500 text-sm text-end px-2'>
+            {formattedPrice}
+          </p>
+        </CardActions>
+      </div>
     </Card>
   )
 }

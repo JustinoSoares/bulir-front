@@ -12,7 +12,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import Slide from '@mui/material/Slide'
 import type { TransitionProps } from '@mui/material/transitions'
 import { FaHistory } from 'react-icons/fa'
-import axios  from 'axios'
+import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import type { Resevation } from '../types'
@@ -25,23 +25,22 @@ const Transition = React.forwardRef(function Transition (
 ) {
   return <Slide direction='up' ref={ref} {...props} />
 })
-  type createData = {
+type createData = {
   id: string
   serviceId: string
   date: string
   status: string
   createdAt: string
+  userId: string
   name: string
   description: string
   price: number
 }
 
-
-
 export default function FullScreenDialog () {
   const [open, setOpen] = React.useState(false)
 
-   const [reservations, setReservations] = useState<createData[]>([])
+  const [reservations, setReservations] = useState<createData[]>([])
   useEffect(() => {
     // pegar as minhas solicitações da api e popular a tabela
     const fetchRequests = async () => {
@@ -55,21 +54,25 @@ export default function FullScreenDialog () {
             }
           }
         )
-  
+
         if (!response.data || response.data.length === 0) {
           setReservations([])
           return
         }
-        const transformedReservations : createData[] = response.data.map((reservation : Resevation) => ({
-          id: reservation.id,
-          serviceId: reservation.serviceId,
-          date: reservation.date,
-          status: reservation.status,
-          createdAt: reservation.createdAt,
-          name: reservation.service.name,
-          description: reservation.service.description,
-          price: reservation.service.price
-        }))
+
+        const transformedReservations: createData[] = response.data.map(
+          (reservation: Resevation) => ({
+            id: reservation.id,
+            serviceId: reservation.serviceId,
+            date: reservation.date,
+            status: reservation.status,
+            createdAt: reservation.createdAt,
+            name: reservation.service.name,
+            description: reservation.service.description,
+            userId: reservation.service.userId,
+            price: reservation.service.price
+          })
+        )
         setReservations(transformedReservations)
       } catch (error) {
         console.error('Erro ao buscar solicitações:', error)
@@ -88,11 +91,12 @@ export default function FullScreenDialog () {
     setOpen(false)
   }
 
-
-
   return (
     <React.Fragment>
-      <button onClick={handleClickOpen} className='flex cursor-pointer items-center px-4 py-2 bg-white text-black rounded-lg hover:bg-blue-50 transition-colors duration-200'>
+      <button
+        onClick={handleClickOpen}
+        className='flex cursor-pointer items-center px-4 py-2 bg-white text-black rounded-lg hover:bg-blue-50 transition-colors duration-200'
+      >
         <FaHistory className='mr-2' />
         Histórico
       </button>
@@ -104,7 +108,12 @@ export default function FullScreenDialog () {
           transition: Transition
         }}
       >
-        <AppBar sx={{ position: 'relative', background: 'linear-gradient(90deg, #ebfefa, #28b39c)' }} >
+        <AppBar
+          sx={{
+            position: 'relative',
+            background: 'linear-gradient(90deg, #ebfefa, #28b39c)'
+          }}
+        >
           <Toolbar>
             <IconButton
               className='text-black'
@@ -114,7 +123,11 @@ export default function FullScreenDialog () {
             >
               <CloseIcon />
             </IconButton>
-            <Typography sx={{ ml: 2, flex: 1, color: 'black' }} variant='h6' component='div'>
+            <Typography
+              sx={{ ml: 2, flex: 1, color: 'black' }}
+              variant='h6'
+              component='div'
+            >
               Histórico de Atividades
             </Typography>
             {/* <Button autoFocus color='inherit' onClick={handleClose}>
@@ -124,16 +137,22 @@ export default function FullScreenDialog () {
         </AppBar>
         {reservations.length === 0 ? (
           <div className='flex justify-center items-center h-full'>
-            <p className='text-gray-500 text-lg'>Nenhuma atividade encontrada.</p>
+            <p className='text-gray-500 text-lg'>
+              Nenhuma atividade encontrada.
+            </p>
           </div>
         ) : (
           <List>
-            {reservations.map((reservation) => (
+            {reservations.map(reservation => (
               <div key={reservation.id}>
                 <ListItemButton>
                   <ListItemText
                     primary={reservation.name}
-                    secondary={`Data: ${new Date(reservation.date).toLocaleDateString()} - Status: ${reservation.status} - Preço: $${reservation.price}`}
+                    secondary={`Data: ${new Date(
+                      reservation.date
+                    ).toLocaleDateString()} - Status: ${
+                      reservation.status
+                    } - Preço: ${reservation.price} kz`}
                   />
                 </ListItemButton>
                 <Divider />

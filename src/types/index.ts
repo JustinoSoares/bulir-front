@@ -42,7 +42,9 @@ export type Resevation  = {
   service: {
     name: string
     description: string
+    servicer_name : string
     price: number
+    userId: string
   }
 }
 
