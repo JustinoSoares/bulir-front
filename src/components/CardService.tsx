@@ -25,7 +25,7 @@ export default function CardService ({
   name,
   description,
   price,
-  userId,
+  userId
 }: MyServicesType) {
   const [loading, setLoading] = React.useState(false)
   const [dialogOpen, setDialogOpen] = React.useState(false)
@@ -40,7 +40,6 @@ export default function CardService ({
       const decoded = jwtDecode<TokenPayload>(token)
       setTokenPayload(decoded)
     }
-    
   }, [])
 
   const formattedPrice = price.toLocaleString('pt-AO', {
@@ -172,19 +171,23 @@ export default function CardService ({
         }}
       />
       <div className='relative'>
-       { userId === tokenPayload?.userId && (
+        {userId === tokenPayload?.userId && (
           <div
-          onClick={() => {
-            deleteService()
-          }}
-          
-          className='absolute top-0 right-0 flex justify-center items-center rounded-full m-5 w-10 h-10 bg-gray-200 '>
-          <FaTrash className='text-center m-2 cursor-pointer text-red-500' />
-        </div>
-       )}
+            onClick={() => {
+              deleteService()
+            }}
+            className='absolute top-0 right-0 flex justify-center items-center rounded-full m-5 w-10 h-10 bg-gray-200 '
+          >
+            <FaTrash className='text-center m-2 cursor-pointer text-red-500' />
+          </div>
+        )}
         <CardContent>
-          <h2 className='text-lg font-semibold mb-2'>{name}</h2>
-          <p className='text-gray-600'>{description}</p>
+          <div >
+            <h2 className='text-lg font-semibold mb-3'>{name}</h2>
+            <p className='text-gray-600 max-w-full text-justify break-words'>
+              {description}
+            </p>
+          </div>
         </CardContent>
 
         <CardActions className='flex items-center justify-between'>
