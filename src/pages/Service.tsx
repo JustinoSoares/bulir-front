@@ -2,9 +2,48 @@ import IconBulir from '../assets/img/logo.png'
 import CardService from '../components/CardService'
 import Footer from '../components/Footer'
 import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { api } from '../services/api'
+
+type MyServivesType = {
+  id: string
+  name: string
+  description: string
+  price: number
+  userId: string
+  createdAt: string
+}
 
 const Service = () => {
   const navigate = useNavigate()
+  const [services, setServices] = useState<MyServivesType[]>([])
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('token')
+        try {
+          const servicesResponse = await api.get<MyServivesType[]>(
+            `/service/all?limit=10`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          )
+          setServices(servicesResponse.data)
+        } catch (error) {
+          console.error('Erro ao buscar serviços do usuário:', error)
+          setServices([])
+        }
+      } catch (error) {
+        console.error('Erro ao buscar dados do usuário:', error)
+        navigate('/')
+      }
+    }
+
+    fetchUserData()
+  }, [navigate])
   return (
     <div>
       <div className='bg-[#ebfefa] min-h-screen px-20'>
@@ -46,13 +85,9 @@ const Service = () => {
         <div className='py-10'>
           <h2 className='text-4xl font-bold mb-6'>Serviços</h2>
           <div className='flex flex-wrap gap-6 justify-center'>
-            <CardService />
-            <CardService />
-            <CardService />
-            <CardService />
-            <CardService />
-            <CardService />
-            <CardService />
+            {services.map(service => (
+              <CardService key={service.id} {...service} />
+            ))}
           </div>
         </div>
       </div>

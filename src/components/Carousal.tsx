@@ -1,6 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 //import { Star } from "lucide-react";
 import CardService from "./CardService";
+import { useNavigate } from "react-router-dom";
+import { api } from "../services/api";
+
+type MyServivesType = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  userId: string;
+  createdAt: string;
+};
 
 interface MarqueeProps {
   children: React.ReactNode;
@@ -64,41 +75,36 @@ const Marquee = ({
 };
 // Demo Component
 export default function MarqueeDemo() {
-  const reviews = [
-    {
-      id: 1,
-      name: "Sarah Johnson",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=sarah",
-      rating: 5,
-      review:
-        "This product exceeded my expectations! The quality is outstanding and the customer service was excellent.",
-    },
-    {
-      id: 2,
-      name: "Michael Chen",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=michael",
-      rating: 4,
-      review:
-        "Great value for money. Would definitely recommend to others looking for a reliable solution.",
-    },
-    {
-      id: 3,
-      name: "Emma Davis",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=emma",
-      rating: 5,
-      review:
-        "Absolutely love it! The features are exactly what I needed, and it's so easy to use.",
-    },
-    {
-      id: 4,
-      name: "James Wilson",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=james",
-      rating: 4,
-      review:
-        "Very impressed with the quality and attention to detail. A fantastic product overall.",
-    },
-  ];
+    const navigate = useNavigate()
+    const [services, setServices] = useState<MyServivesType[]>([])
 
+
+      useEffect(() => {
+        const fetchUserData = async () => {
+          try {
+            const token = localStorage.getItem('token')
+            try {
+              const servicesResponse = await api.get<MyServivesType[]>(
+                `/service/all?limit=10`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`
+                  }
+                }
+              )
+              setServices(servicesResponse.data)
+            } catch (error) {
+              console.error('Erro ao buscar serviços do usuário:', error)
+              setServices([])
+            }
+          } catch (error) {
+            console.error('Erro ao buscar dados do usuário:', error)
+            navigate('/')
+          }
+        }
+    
+        fetchUserData()
+      }, [navigate])
   return (
     <div className="bg-background p-8 flex flex-col gap-8 items-center justify-center">
       <div className="w-full md:max-w-4xl ">
@@ -110,8 +116,8 @@ export default function MarqueeDemo() {
             </div>
            
           <Marquee direction="left" className="py-4" speed={100}>
-            {reviews.map((review) => (
-              <CardService key={review.id} />
+            {services.map((service) => (
+              <CardService key={service.id} {...service} />
             ))}
           </Marquee>
         </div>

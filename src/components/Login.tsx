@@ -1,5 +1,8 @@
 import logo from '../assets/img/logo.png'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { login } from '../services/auth'
+import { api } from '../services/api'
 
 type Props = {
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>
@@ -7,6 +10,28 @@ type Props = {
 
 const Login = ({ setIsLogin }: Props) => {
   const navigate = useNavigate()
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  async function handleLogin () {
+    try {
+      setLoading(true)
+      setError(null)
+
+      const data = await login({ username, password })
+      // 🔐 salvar no localStorage
+      localStorage.setItem('token', data.token)
+      // opcional: setar token no axios
+      api.defaults.headers.common.Authorization = `Bearer ${data.token}`
+      navigate('/profile')
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Erro ao fazer login')
+    } finally {
+      setLoading(false)
+    }
+  }
   return (
     <div className='w-full min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-20 py-10'>
       <div className='w-full max-w-md sm:max-w-lg lg:max-w-xl'>
@@ -35,7 +60,9 @@ const Login = ({ setIsLogin }: Props) => {
           <div className='border border-gray-300 p-1 rounded-2xl'>
             <input
               type='text'
+              value={username}
               className='w-full p-3 outline-none'
+              onChange={(e) => {setUsername(e.target.value)}}
               placeholder='exemplo@gmail.com'
             />
           </div>
@@ -43,6 +70,8 @@ const Login = ({ setIsLogin }: Props) => {
           <div className='border border-gray-300 p-1 rounded-2xl'>
             <input
               type='password'
+              value={password}
+              onChange={(e) => {setPassword(e.target.value)}}
               className='w-full p-3 outline-none'
               placeholder='*********'
             />
@@ -59,10 +88,14 @@ const Login = ({ setIsLogin }: Props) => {
             </span>
           </div>
 
-          <button className='bg-[#28b39c] w-full text-white py-3 rounded-lg hover:bg-[#31ecc6] transition'>
-            Login
+          <button 
+            onClick={handleLogin}
+            disabled={loading}
+          className='bg-[#28b39c] w-full text-white py-3 rounded-lg hover:bg-[#31ecc6] transition'>
+            {loading ? 'Entrando...' : 'Login'}
           </button>
 
+          {error && <p className='text-red-500 text-sm'>{error}</p>}
           <p className='text-gray-400 text-sm'>
             Não tem uma conta?{' '}
             <span
