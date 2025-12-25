@@ -87,9 +87,17 @@ export default function CardService ({
       }
       toast.success(`Serviço ${name} solicitado com sucesso!`)
       setDialogOpen(false)
-    } catch (error) {
-      toast.error(error?.response?.data?.message || 'Erro ao solicitar serviço')
-      console.error('Erro ao solicitar serviço:', error)
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        const message =
+          error.response?.data?.message ||
+          'Erro ao criar usuário. Por favor, tente novamente.'
+        toast.error(message)
+      } else if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error('Erro inesperado.')
+      }
     } finally {
       setLoading(false)
     }
