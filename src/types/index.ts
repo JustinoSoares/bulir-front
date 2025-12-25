@@ -32,3 +32,24 @@ export type PropsDialog = {
   action: () => void | Promise<void>
   onClose: () => void
 }
+
+export type Resevation  = {
+  id: string
+  serviceId: string
+  date: string
+  status: string
+  createdAt: string
+  service: {
+    name: string
+    description: string
+    price: number
+  }
+}
+
+export type DefaultErrorResponse = {
+    response: {
+        data: {
+            message: string
+        }
+    }
+}

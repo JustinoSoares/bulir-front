@@ -9,6 +9,7 @@ import Paper from '@mui/material/Paper'
 import { useEffect, useState } from 'react'
 import axios  from 'axios'
 import { toast } from 'react-toastify'
+import type { Resevation } from '../types'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -62,7 +63,7 @@ export default function CustomizedTables () {
           setReservations([])
           return
         }
-        const transformedReservations : createData[] = response.data.map((reservation: any) => ({
+        const transformedReservations : createData[] = response.data.map((reservation: Resevation) => ({
           id: reservation.id,
           serviceId: reservation.serviceId,
           date: reservation.date,

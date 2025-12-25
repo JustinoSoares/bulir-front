@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { createUser } from '../services/createUser'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
+import axios from 'axios'
 
 type Props = {
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>
@@ -41,12 +42,22 @@ const Register = ({ setIsLogin }: Props) => {
       }
       toast.success('Usuário criado com sucesso!')
       navigate('/')
-    } catch (error) {
-      console.error('Error creating user:', error)
-      setError(error.response.data.message || 'Erro ao criar usuário. Por favor, tente novamente.')
-      toast.error(error.response.data.message || 'Erro ao criar usuário. Por favor, tente novamente.')
-    }
-    finally {
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        const message =
+          error.response?.data?.message ||
+          'Erro ao criar usuário. Por favor, tente novamente.'
+
+        setError(message)
+        toast.error(message)
+      } else if (error instanceof Error) {
+        setError(error.message)
+        toast.error(error.message)
+      } else {
+        setError('Erro inesperado.')
+        toast.error('Erro inesperado.')
+      }
+    } finally {
       setLoading(false)
     }
   }
@@ -115,7 +126,7 @@ const Register = ({ setIsLogin }: Props) => {
             {loading ? 'Registrando...' : 'Registrar-se'}
           </button>
         </div>
-        {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
+        {error && <p className='text-red-500 text-xs mt-2'>{error}</p>}
 
         <div className='mt-1 max-w-[80%]'>
           <p className='text-gray-400 text-sm'>

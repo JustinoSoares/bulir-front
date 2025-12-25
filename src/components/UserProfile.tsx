@@ -1,16 +1,11 @@
 import {
   FaEnvelope,
   FaFingerprint,
-  FaGofore,
-  FaHistory,
   FaMoneyBillWave,
-  FaOutdent,
-  FaSignOutAlt
 } from 'react-icons/fa'
 import CardService from './CardService'
 import FullScreenDialog from './FullscreenDialog'
 import AddService from './Addservice'
-import Requests from './Requests'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { api } from '../services/api'
@@ -18,7 +13,6 @@ import withOutPhoto from '../assets/img/images.jpeg'
 import { useNavigate } from 'react-router-dom'
 import type { TokenPayload, User, MyServivesType } from '../types'
 import { jwtDecode } from 'jwt-decode'
-import Myservices from './Myservices'
 import Dialog from './Dialog'
 
 const UserProfile = () => {

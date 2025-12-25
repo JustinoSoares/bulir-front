@@ -15,6 +15,7 @@ import { FaHistory } from 'react-icons/fa'
 import axios  from 'axios'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import type { Resevation } from '../types'
 
 const Transition = React.forwardRef(function Transition (
   props: TransitionProps & {
@@ -34,6 +35,9 @@ const Transition = React.forwardRef(function Transition (
   description: string
   price: number
 }
+
+
+
 export default function FullScreenDialog () {
   const [open, setOpen] = React.useState(false)
 
@@ -56,7 +60,7 @@ export default function FullScreenDialog () {
           setReservations([])
           return
         }
-        const transformedReservations : createData[] = response.data.map((reservation: any) => ({
+        const transformedReservations : createData[] = response.data.map((reservation : Resevation) => ({
           id: reservation.id,
           serviceId: reservation.serviceId,
           date: reservation.date,
@@ -103,8 +107,8 @@ export default function FullScreenDialog () {
         <AppBar sx={{ position: 'relative', background: 'linear-gradient(90deg, #ebfefa, #28b39c)' }} >
           <Toolbar>
             <IconButton
+              className='text-black'
               edge='start'
-              color='black'
               onClick={handleClose}
               aria-label='close'
             >
