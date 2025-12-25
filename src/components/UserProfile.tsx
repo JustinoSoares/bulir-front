@@ -112,7 +112,7 @@ const UserProfile = () => {
               <h2 className='text-xl font-semibold mb-4'>
                 Informações Pessoais
               </h2>
-              <div className='grid grid-cols-1 md:grid-cols-1 gap-4'>
+              <div className='grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4'>
                 <div className='flex items-center'>
                   <FaEnvelope className='text-gray-500 mr-2' />
                   <span>{userData?.email}</span>

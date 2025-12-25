@@ -107,10 +107,10 @@ export default function MarqueeDemo() {
       }, [navigate])
   return (
     <div className="bg-background p-8 flex flex-col gap-8 items-center justify-center">
-      <div className="w-full md:max-w-4xl ">
+      <div className="w-full md:max-w-4xl lg:max-w-4xl ">
         <div>
-            <div className="flex flex-col md:flex-row justify-center items-start font-bold">
-               <h2 className="text-2xl md:text-4xl w-full text-center text-[#292929] mb-8">
+            <div className="flex flex-col md:flex-row lg:flex-row justify-center items-start font-bold">
+               <h2 className="text-2xl md:text-4xl lg:text-4xl w-full text-center text-[#292929] mb-8">
                 serviços mais solicitados
             </h2>  
             </div>

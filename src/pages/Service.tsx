@@ -55,8 +55,8 @@ const Service = () => {
   }, [navigate, searchTerm])
   return (
     <div>
-      <div className='bg-[#ebfefa] min-h-screen px-20'>
-        <header className='flex flex-wrap justify-between items-center py-6'>
+      <div className='bg-[#ebfefa] min-h-screen px-10 md:px-20 lg:px-40'>
+        <header className='flex flex-wrap justify-center md:justify-between lg:justify-between items-center py-6'>
           <div
             className='flex justify-center items-center  gap-2 cursor-pointer'
             onClick={() => navigate('/')}

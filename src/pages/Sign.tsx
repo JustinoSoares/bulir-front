@@ -11,7 +11,7 @@ const Sign = () => {
   return (
     <div>
       <div className='flex'>
-        <div className='hidden md:block'>
+        <div className='hidden md:block lg:block'>
           <img
             className='h-screen max-w-[50vw] object-cover'
             src={bgLogin}
