@@ -100,7 +100,7 @@ const UserProfile = () => {
                 </div>
               </div>
 
-              <div className='flex gap-4'>
+              <div className='flex flex-wrap justify-end gap-4'>
                 <FullScreenDialog />
                 <Dialog {...dataDialog} />
               </div>

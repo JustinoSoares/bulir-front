@@ -110,8 +110,8 @@ export default function MarqueeDemo() {
       <div className="w-full md:max-w-4xl ">
         <div>
             <div className="flex flex-col md:flex-row justify-center items-start font-bold">
-               <h2 className="text-5xl max-w-[600px] text-center text-[#292929] mb-8">
-                O serviços mais solicitados
+               <h2 className="text-2xl md:text-4xl w-full text-center text-[#292929] mb-8">
+                serviços mais solicitados
             </h2>  
             </div>
            
