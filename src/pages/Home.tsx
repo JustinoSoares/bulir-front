@@ -3,17 +3,14 @@ import background from '../assets/img/bg1.webp'
 import MagneticButton from '../components/MagneticButton'
 import Carousal from '../components/Carousal'
 import Footer from '../components/Footer'
-import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const Home = () => {
-  const navigate = useNavigate()
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+ const [isLoggedIn] = useState(() => {
+  return !!localStorage.getItem('token')
+})
 
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-    setIsLoggedIn(!!token)
-  }, [])
+
 
   return (
     <div className='overflow-x-hidden font-sans'>

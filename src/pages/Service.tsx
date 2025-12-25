@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 import { api } from '../services/api'
 import { FaSearch } from 'react-icons/fa'
 import { toast } from 'react-toastify'
-import AlertDialog from '../components/Dialog'
 
 type MyServivesType = {
   id: string
