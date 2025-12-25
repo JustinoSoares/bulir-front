@@ -1,4 +1,12 @@
-import { FaEnvelope, FaFingerprint, FaSearch } from 'react-icons/fa'
+import {
+  FaEnvelope,
+  FaFingerprint,
+  FaGofore,
+  FaHistory,
+  FaMoneyBillWave,
+  FaOutdent,
+  FaSignOutAlt
+} from 'react-icons/fa'
 import CardService from './CardService'
 import FullScreenDialog from './FullscreenDialog'
 import AddService from './Addservice'
@@ -8,34 +16,48 @@ import { useState } from 'react'
 import { api } from '../services/api'
 import withOutPhoto from '../assets/img/images.jpeg'
 import { useNavigate } from 'react-router-dom'
-
-type User = {
-  id: string
-  full_name: string
-  nif: string
-  email: string
-  phone: string
-  balance: number
-  user_type: string
-  createdAt: string
-}
-
-type MyServivesType = {
-  id: string
-  name: string
-  description: string
-  price: number
-  userId: string
-  createdAt: string
-}
+import type { TokenPayload, User, MyServivesType } from '../types'
+import { jwtDecode } from 'jwt-decode'
+import Myservices from './Myservices'
+import Dialog from './Dialog'
 
 const UserProfile = () => {
   const navigate = useNavigate()
   const [userData, setUserData] = useState<User | null>(null)
   const [services, setServices] = useState<MyServivesType[]>([])
+  const [tokenPayload, setTokenPayload] = useState<TokenPayload | null>(null)
+  const [dialogOutpen, setDialogOpen] = useState(false)
 
+  const formattedBalance = (balance: number) => {
+    return balance.toLocaleString('pt-AO', {
+      style: 'currency',
+      currency: 'AOA'
+    })
+  }
+
+  const dataDialog = {
+    title: 'Confirmar Logout',
+    description: `Tem certeza que deseja sair da sua conta?`,
+    textButton: 'Sair',
+    className:
+      'flex font-semibold text-red-500 cursor-pointer items-center px-4 py-2 bg-white rounded-lg hover:bg-blue-50 transition-colors duration-200',
+    openDialog: dialogOutpen,
+    action: async () => {
+      localStorage.removeItem('token')
+      navigate('/')
+    },
+    onClose: () => {
+      setDialogOpen(false)
+    }
+  }
   useEffect(() => {
     const fetchUserData = async () => {
+      const token = localStorage.getItem('token')
+
+      if (token) {
+        const decoded = jwtDecode<TokenPayload>(token)
+        setTokenPayload(decoded)
+      }
       try {
         const token = localStorage.getItem('token')
         const response = await api.get<User>('/user/me', {
@@ -72,8 +94,9 @@ const UserProfile = () => {
         <div className='bg-white shadow-xl rounded-lg overflow-hidden'>
           <div className='bg-gradient-to-r from-[#ebfefa] to-[#28b39c] px-6 py-4'>
             <div className='flex items-center justify-between'>
-              <div className='flex items-center'>
+              <div className='flex items-center cursor-pointer'>
                 <img
+                  onClick={() => navigate('/')}
                   src={withOutPhoto}
                   alt={userData?.full_name || 'User'}
                   className='w-20 h-20 rounded-full border-4 border-white'
@@ -82,12 +105,10 @@ const UserProfile = () => {
                   <h1 className='text-2xl font-bold'>{userData?.full_name}</h1>
                 </div>
               </div>
+
               <div className='flex gap-4'>
-                {/* <button className='flex cursor-pointer items-center px-4 py-2 bg-white text-black rounded-lg hover:bg-blue-50 transition-colors duration-200'>
-                  <FaEdit className='mr-2' />
-                  Editar
-                </button> */}
                 <FullScreenDialog />
+                <Dialog {...dataDialog} />
               </div>
             </div>
           </div>
@@ -106,25 +127,37 @@ const UserProfile = () => {
                   <FaFingerprint className='text-gray-500 mr-2' />
                   <span>{userData?.nif}</span>
                 </div>
-                <div>
-                  <Requests />
+
+                <div className='flex items-center'>
+                  <FaMoneyBillWave className='text-gray-500 mr-2' />
+                  <span>{formattedBalance(userData?.balance || 0)}</span>
                 </div>
+                
               </div>
             </div>
-            <div>
-              <AddService />
-            </div>
+            {tokenPayload?.user_type === 'servicer' && (
+              <>
+                <div>
+                  <AddService />
+                </div>
+              </>
+            )}
           </div>
+          {tokenPayload?.user_type === 'servicer' && (
+            <div className='border-t px-6 py-4'>
+              <h2 className='text-xl font-semibold mb-4 text-center'>
+                Meus serviços
+              </h2>
 
-          <div className='border-t px-6 py-4'>
-            <h2 className='text-xl font-semibold mb-4 text-center'>Meus serviços</h2>
-            
-            <div className='flex flex-wrap justify-center gap-4'>
-              {services.map(service => (
-                <CardService {...service} key={service.id} />
-              ))}
+              <div className='flex flex-wrap justify-center gap-4'>
+                {services.map(service => (
+                  <CardService {...service} key={service.id} />
+                ))}
+              </div>
             </div>
-          </div>
+          )}{' '}
+          :{' '}
+         
         </div>
       </div>
     </div>

@@ -73,7 +73,6 @@ export default function CustomizedTables () {
           price: reservation.service.price
         }))
         setReservations(transformedReservations)
-      
       } catch (error) {
         console.error('Erro ao buscar solicitações:', error)
         setReservations([])

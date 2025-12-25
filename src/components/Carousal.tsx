@@ -82,13 +82,13 @@ export default function MarqueeDemo() {
       useEffect(() => {
         const fetchUserData = async () => {
           try {
-            const token = localStorage.getItem('token')
+            const token_bulir = localStorage.getItem('token_bulir')
             try {
               const servicesResponse = await api.get<MyServivesType[]>(
-                `/service/all?limit=10`,
+                `/service/all?limit=50`,
                 {
                   headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token_bulir}`
                   }
                 }
               )

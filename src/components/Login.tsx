@@ -1,8 +1,9 @@
 import logo from '../assets/img/logo.png'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import {  useState } from 'react'
 import { login } from '../services/auth'
 import { api } from '../services/api'
+import { useEffect } from 'react'
 
 type Props = {
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>
@@ -14,8 +15,17 @@ const Login = ({ setIsLogin }: Props) => {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      navigate('/profile')
+    }
+  }, [navigate])
 
   async function handleLogin () {
+
     try {
       setLoading(true)
       setError(null)
@@ -69,7 +79,7 @@ const Login = ({ setIsLogin }: Props) => {
 
           <div className='border border-gray-300 p-1 rounded-2xl'>
             <input
-              type='password'
+              type={visible ? 'text' : 'password'}
               value={password}
               onChange={(e) => {setPassword(e.target.value)}}
               className='w-full p-3 outline-none'
@@ -79,7 +89,11 @@ const Login = ({ setIsLogin }: Props) => {
 
           <div className='flex justify-between items-center text-sm'>
             <label className='text-gray-400 flex items-center gap-1 cursor-pointer'>
-              <input type='checkbox' />
+              <input 
+              type='checkbox'
+              checked={visible}
+              onChange={() => setVisible(!visible)}
+              />
               <span>ver senha</span>
             </label>
 

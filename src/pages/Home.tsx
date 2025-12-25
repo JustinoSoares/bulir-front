@@ -4,9 +4,17 @@ import MagneticButton from '../components/MagneticButton'
 import Carousal from '../components/Carousal'
 import Footer from '../components/Footer'
 import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
 const Home = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    setIsLoggedIn(!!token)
+  }, [])
+
   return (
     <div className='overflow-x-hidden font-sans'>
       <div className='relative h-dvh w-dvw '>
@@ -37,7 +45,10 @@ const Home = () => {
             </p>
           </div>
 
-          <MagneticButton navigateTo="/login" className='text-black font-semibold cursor-pointer hover:bg-[#28b39c]'>
+          <MagneticButton
+            navigateTo='/login'
+            className='text-black font-semibold cursor-pointer hover:bg-[#28b39c]'
+          >
             Começar Agora
           </MagneticButton>
         </div>
@@ -45,11 +56,16 @@ const Home = () => {
       </div>
       <section className='bg-[#ebfefa] p-20'>
         <Carousal />
-        <div className='text-center'>
-          <MagneticButton navigateTo="/services" className='mt-10 text-white bg-[#28b39c] font-semibold cursor-pointer hover:bg-[#31ecc6]'>
-            Ver Todos os Serviços
-          </MagneticButton>
-        </div>
+        {isLoggedIn && (
+          <div className='text-center'>
+            <MagneticButton
+              navigateTo='/services'
+              className='mt-10 text-white bg-[#28b39c] font-semibold cursor-pointer hover:bg-[#31ecc6]'
+            >
+              Ver Todos os Serviços
+            </MagneticButton>
+          </div>
+        )}
       </section>
       {/* Footer */}
       <Footer />
